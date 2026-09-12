@@ -9,7 +9,4 @@ data/raw/
 data/processed/
 data/*.csv
 
-# Generated artifacts are explicitly selected during release.
-artifacts/*.joblib
-artifacts/*.json
-artifacts/*.png
+# Model and evaluation artifacts are committed for reproducible deployment.
