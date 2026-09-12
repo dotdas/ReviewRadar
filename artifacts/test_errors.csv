@@ -1,0 +1,21 @@
+row_id,source,review,label,prediction
+imdb-0513,imdb,"For that, it's worth checking out.",1,0
+yelp-0396,yelp,"To summarize... the food was incredible, nay, transcendant... but nothing brings me joy quite like the memory of the pneumatic condiment dispenser.",1,0
+yelp-0452,yelp,Food was so gooodd.,1,0
+amazon-0563,amazon,"All in all, I'm quite satisfied with this purchase.",1,0
+imdb-0866,imdb,"The characters are interesting, even if a bit predictable.",1,0
+amazon-0548,amazon,Trying to make a call on these is an exercise in frustration.,0,1
+amazon-0085,amazon,"This item worked great, but it broke after 6 months of use.",0,1
+imdb-0183,imdb,I'll even say it again  this is torture.,0,1
+yelp-0260,yelp,very tough and very short on flavor!,0,1
+amazon-0053,amazon,A usable keyboard actually turns a PDA into a real-world useful machine instead of just a neat gadget.,1,0
+amazon-0409,amazon,Plantronics Bluetooth Excelent Buy.,1,0
+amazon-0109,amazon,"The camera, although rated at an impressive 1.3 megapixels, renders images that fall well below expectations of such a relatively high resolution.",0,1
+yelp-0006,yelp,Now I am getting angry and I want my damn pho.,0,1
+imdb-0543,imdb,"While you don't yet hear Mickey speak, there are tons of sound effects and music throughout the film--something we take for granted now but which was a huge crowd pleaser in 1928.",1,0
+yelp-0783,yelp,"Perfect for someone (me) who only likes beer ice cold, or in this case, even colder.",1,0
+amazon-0317,amazon,We have gotten a lot of compliments on it.,1,0
+imdb-0808,imdb,Editing: The editing of this film was phenomenal in my opinion.,1,0
+imdb-0023,imdb,How can anyone in their right mind ask for anything more from a movie than this?,1,0
+yelp-0400,yelp,Cooked to perfection and the service was impeccable.,1,0
+imdb-0213,imdb,""" In fact, it's hard to remember that the part of Ray Charles is being acted, and not played by the man himself.",1,0
