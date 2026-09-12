@@ -16,6 +16,8 @@ ARTIFACTS = ROOT / "artifacts"
 MAX_BYTES = 2 * 1024 * 1024
 MAX_ROWS = 1_000
 MAX_CHARS = 5_000
+RESULT_COLUMNS = ["row_id", "review", "predicted_sentiment", "positive_probability", "status"]
+SKIPPED_COLUMNS = ["row_id", "review", "reason"]
 
 st.set_page_config(page_title="ReviewRadar", page_icon="R", layout="wide")
 st.markdown("""<style>
@@ -58,7 +60,7 @@ def explain(result: dict) -> None:
     st.caption(f"Positive-class probability: {result['positive_probability']:.1%}. This is a model score, not calibrated confidence.")
     contribution = pd.DataFrame(result["contributions"])
     contribution["direction"] = contribution["contribution"].map(lambda value: "toward positive" if value > 0 else "toward negative")
-    st.dataframe(contribution[["term", "contribution", "direction"]], hide_index=True, use_container_width=True)
+    st.dataframe(contribution[["term", "contribution", "direction"]], hide_index=True, width="stretch")
     st.caption("Terms are TF-IDF-weighted contributions to the model score. They do not prove why a person liked or disliked a review.")
 
 
@@ -73,7 +75,7 @@ def predict_frame(model, input_frame: pd.DataFrame, column: str) -> tuple[pd.Dat
         else:
             outcome = predict_one(model, text)
             valid.append({"row_id": row_number + 1, "review": text, "predicted_sentiment": outcome["sentiment"], "positive_probability": outcome["positive_probability"], "status": outcome["status"]})
-    return pd.DataFrame(valid), pd.DataFrame(skipped)
+    return pd.DataFrame(valid, columns=RESULT_COLUMNS), pd.DataFrame(skipped, columns=SKIPPED_COLUMNS)
 
 
 st.title("ReviewRadar")
@@ -125,6 +127,10 @@ with batch_tab:
                 st.session_state["batch_skipped"] = skipped
     results = st.session_state.get("batch_results")
     skipped = st.session_state.get("batch_skipped")
+    if isinstance(results, pd.DataFrame) and not set(RESULT_COLUMNS).issubset(results.columns):
+        st.session_state.pop("batch_results", None)
+        st.session_state.pop("batch_skipped", None)
+        results, skipped = None, None
     if isinstance(results, pd.DataFrame):
         labeled = results.loc[results["status"] == "ok"].copy()
         columns = st.columns(4)
@@ -133,7 +139,7 @@ with batch_tab:
             st.bar_chart(labeled["predicted_sentiment"].value_counts())
         negative_only = st.checkbox("Show negative reviews only")
         displayed = labeled.loc[labeled["predicted_sentiment"].eq("negative")] if negative_only else labeled
-        st.dataframe(displayed, hide_index=True, use_container_width=True)
+        st.dataframe(displayed, hide_index=True, width="stretch")
         st.download_button("Download displayed results", export_csv(displayed), "reviewradar_results.csv", "text/csv")
         if not displayed.empty:
             selected_id = st.selectbox("Explain a displayed review", displayed["row_id"].tolist())
@@ -164,4 +170,4 @@ with evaluation_tab:
     first.metric("Test macro-F1", f"{metrics['test']['macro_f1']:.3f}"); second.metric("Test accuracy", f"{metrics['test']['accuracy']:.3f}"); third.metric("Dummy validation macro-F1", f"{metrics['dummy_validation']['macro_f1']:.3f}")
     st.json(metrics["by_source_domain"])
     st.caption("Limitations: English positive/negative only. Mixed, neutral, sarcastic, and unfamiliar-domain reviews can be misclassified. Probabilities are not calibrated confidence or business urgency.")
-    st.dataframe(errors, hide_index=True, use_container_width=True)
+    st.dataframe(errors, hide_index=True, width="stretch")
