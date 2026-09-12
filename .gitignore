@@ -1,0 +1,15 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.streamlit/secrets.toml
+
+# Downloaded raw data and private user uploads must never be committed.
+data/raw/
+data/processed/
+data/*.csv
+
+# Generated artifacts are explicitly selected during release.
+artifacts/*.joblib
+artifacts/*.json
+artifacts/*.png
